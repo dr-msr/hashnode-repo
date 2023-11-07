@@ -9,16 +9,12 @@ jobs:
   job_extract_md_file_content:
     runs-on: ubuntu-latest
     outputs:
-     last_sha: ${{ steps.last_sha }}
      last_md: ${{ steps.last_md }}
     steps:
-    - id: last_sha
-      run: git log --format=%H --grep="create post" -n 1 >> "$GITHUB_OUTPUT"
-      shell: bash
     - id: last_md
-      run: git show $last_sha | grep "+++" | sed 's/.*\///' >> "$GITHUB_OUTPUT"
+      run: git show $GITHUB_SHA | grep "+++" | sed 's/.*\///' >> "$GITHUB_OUTPUT"
       shell: bash
     - id: test_print
-      run: echo "$last_sha"
+      run: echo "$last_md"
       shell: bash
 
