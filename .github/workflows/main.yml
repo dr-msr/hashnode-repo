@@ -15,6 +15,6 @@ jobs:
 
     - name: Find latest commit
       run: |
-       echo "$(git log --format=%H --grep="create post" -n 1)" |
+       echo "$(git log --format=%H --grep="create post" -n 1)"
        echo "$LAST_MD"
       shell: bash
