@@ -14,7 +14,7 @@ jobs:
         with:
          format: 'json'
       - run: |
-          readarray -t added_files <<<"$(jq -r '.[]' <<<'${{ steps.files.outputs.added_file }}')"
+          readarray -t added_files <<<"$(jq -r '.[]' <<<'${{ steps.files.outputs.added_files }}')"
           for added_file in ${added_files[@]}; do
           echo "Do something with this ${added_file}."
           done
