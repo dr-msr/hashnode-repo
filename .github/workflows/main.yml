@@ -1,0 +1,28 @@
+name: Extract MD Content
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  extract_content:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Extract content
+      id: extract_content
+      run: |
+        md_file=$(ls -t *.md | head -1)
+        subject=$(grep -oP '(?<=title: ")[^"]+' "$md_file")
+        body=$(awk '/^---$/,/^---$/ {next} {print}' "$md_file")
+        echo "::set-output name=subject::$subject"
+        echo "::set-output name=body::$body"
+      
+    - name: Display extracted content
+      run: |
+        echo "Subject: ${{ steps.extract_content.outputs.subject }}"
+        echo "Body: ${{ steps.extract_content.outputs.body }}"
