@@ -15,5 +15,5 @@ jobs:
 
     - name: Find latest commit
       run: |
-       echo "Latest Commit SHA: $GITHUB_SHA"
+       git show $(git log --format=%H --grep="create post" -n 1) | grep "+++" | sed 's/.*\///'
       shell: bash
