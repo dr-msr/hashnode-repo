@@ -8,14 +8,14 @@ on:
 jobs:
   job_extract_md_file_content:
     runs-on: ubuntu-latest
-    outputs:
-     last_md: ${{ steps.last_md }}
     steps:
-    - id: last_md
-      run: |
-       git show $GITHUB_SHA | grep "+++" | sed 's/.*\///' >> "$GITHUB_OUTPUT"
-      shell: bash
-    - id: test_print
-      run: echo "$last_md"
-      shell: bash
+      - id: files
+        uses: jitterbit/get-changed-files@v1
+        with:
+         format: 'json'
+      - run: |
+          readarray -t removed_files <<<"$(jq -r '.[]' <<<'${{ steps.files.outputs.removed }}')"
+          for removed_file in ${removed_files[@]}; do
+          echo "Do something with this ${removed_file}."
+          done
 
