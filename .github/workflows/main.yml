@@ -1,28 +1,22 @@
-name: Extract MD Content
-
-on:
-  push:
-    branches:
-      - main
-
-jobs:
-  extract_content:
-    runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout code
+    - name: Check out the code
       uses: actions/checkout@v2
 
-    - name: Extract content
-      id: extract_content
+    - name: Find the latest .md file
       run: |
-        md_file=$(ls -t *.md | head -1)
-        subject=$(grep -oP '(?<=title: ")[^"]+' "$md_file")
-        body=$(awk '/^---$/,/^---$/ {next} {print}' "$md_file")
-        echo "::set-output name=subject::$subject"
-        echo "::set-output name=body::$body"
-      
-    - name: Display extracted content
+        latest_md_file=$(ls -1t *.md | head -n1)
+        echo "Latest .md file: $latest_md_file" >> extracted-content.txt
+        echo "subject=$(basename -- $latest_md_file .md)" >> extracted-content.txt
+      shell: bash
+
+    - name: Read and set 'subject' and 'body' variables
       run: |
-        echo "Subject: ${{ steps.extract_content.outputs.subject }}"
-        echo "Body: ${{ steps.extract_content.outputs.body }}"
+        extracted_content=$(cat extracted-content.txt)
+        export $extracted_content
+      shell: bash
+
+    - name: Show 'subject' and 'body' variables
+      run: |
+        echo "subject: $subject"
+        echo "body: $body"
+      shell: bash
