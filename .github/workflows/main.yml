@@ -17,5 +17,5 @@ jobs:
       run: |
        sha=$(git log --format=%H --grep="create post" -n 1)
        latest=$(git show $sha | grep "+++" | sed 's/.*\///')
-       echo $latest
+       echo $latest > index
       shell: bash
