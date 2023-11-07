@@ -15,10 +15,5 @@ jobs:
 
     - name: Find latest commit
       run: |
-       sha=$(git log --format=%H --grep="create post" -n 1)
-       latest=$(git show $sha | grep "+++" | sed 's/.*\///')
-       echo $latest 
-       if [ "$latest" = $LAST_MD ]; then
-        echo "Yes"
-       fi
+       git log --format=%H --grep="create post" -n 1
       shell: bash
