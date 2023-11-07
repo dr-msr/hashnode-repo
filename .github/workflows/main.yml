@@ -12,7 +12,7 @@ jobs:
       - id: files
         uses: jitterbit/get-changed-files@v1
       - run: |
-         for changed_file in ${{ steps.files.outputs.add }}; do
+         for changed_file in ${{ steps.files.outputs.added }}; do
          echo "Do something with this ${changed_file}."
          grep "title" $(changed_file)
          done
