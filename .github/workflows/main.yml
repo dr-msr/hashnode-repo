@@ -1,9 +1,9 @@
-name: Extract MD File Content
+name: Post MD To Wordpress
 
 on:
   push:
     branches:
-      - main  # Adjust this to the branch you want to trigger the action on
+      - main  
 
 jobs:
   extract_md_file_content:
@@ -13,21 +13,7 @@ jobs:
     - name: Check out the code
       uses: actions/checkout@v2
 
-    - name: Find the latest .md file
+    - name: Find latest commit
       run: |
-        latest_md_file=$(ls -1t *.md | head -n1)
-        echo "Latest .md file: $latest_md_file" >> extracted-content.txt
-        echo "subject=$(basename -- $latest_md_file .md)" >> extracted-content.txt
-      shell: bash
-
-    - name: Read and set 'subject' and 'body' variables
-      run: |
-        extracted_content=$(cat extracted-content.txt)
-        export $extracted_content
-      shell: bash
-
-    - name: Show 'subject' and 'body' variables
-      run: |
-        echo "subject: $subject"
-        echo "body: $body"
+       echo "Latest Commit SHA: $GITHUB_SHA"
       shell: bash
