@@ -15,5 +15,6 @@ jobs:
 
     - name: Find latest commit
       run: |
-       git show $(git log --format=%H --grep="create post" -n 1) | grep "+++" | sed 's/.*\///'
+       latest=$(git show $(git log --format=%H --grep="create post" -n 1) | grep "+++" | sed 's/.*\///')
+       echo $latest
       shell: bash
