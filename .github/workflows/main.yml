@@ -17,6 +17,8 @@ jobs:
       run: |
        sha=$(git log --format=%H --grep="create post" -n 1)
        latest=$(git show $sha | grep "+++" | sed 's/.*\///')
-       echo $latest > index
-       git add index && git commit -m "update index" && git push
+       echo $latest 
+       if [ "$latest" = $LAST_MD ]; then
+        echo "Yes"
+       fi
       shell: bash
