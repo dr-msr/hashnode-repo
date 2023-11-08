@@ -17,13 +17,13 @@ jobs:
         run: |
          for changed_file in ${{ steps.files.outputs.added }}; do
          subject=$(grep "title" ${changed_file} | sed 's/title: //' | sed 's/"//' | sed 's/"//')
-         echo "${subject}" >> $GITHUB_OUTPUT
+         echo "subject=${subject}" >> $GITHUB_OUTPUT
          done
       - id: generate-content
         run: |
          for changed_file in ${{ steps.files.outputs.added }}; do
          content=$(sed '/---/,/---/d' ${changed_file} )
-         echo "${content}" >> $GITHUB_OUTPUT
+         echo "content=${content}" >> $GITHUB_OUTPUT
          done
       - name: Send mail
         uses: dawidd6/action-send-mail@v3
@@ -33,9 +33,9 @@ jobs:
          secure: true
          username: ${{secrets.MAIL_USERNAME}}
          password: ${{secrets.MAIL_PASSWORD}}
-         subject: ${{steps.generate-subject.outputs}}
+         subject: ${{steps.generate-subject.outputs.subject}}
          to: ${{secrets.ADDRESS_WP}}
          from: drmsr-github 
-         body: ${{steps.generate-content.outputs}}
+         body: ${{steps.generate-content.outputs.content}}
  
 
