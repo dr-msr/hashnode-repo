@@ -8,6 +8,9 @@ on:
 jobs:
   job_extract_md_file_content:
     runs-on: ubuntu-latest
+    outputs:
+     subject: ${{steps.generate-subject.outputs.subject}}
+     content: ${{steps.generate-content.outputs.content}}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
