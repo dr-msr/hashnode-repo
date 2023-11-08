@@ -20,6 +20,7 @@ jobs:
          content=$(sed '/---/,/---/d' ${changed_file} )
          echo "${subject}"
          echo "${content}"
+         done
       - name: Send mail
         uses: dawidd6/action-send-mail@v3
         with:
