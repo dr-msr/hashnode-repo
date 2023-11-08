@@ -9,6 +9,8 @@ jobs:
   job_extract_md_file_content:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
       - id: files
         uses: jitterbit/get-changed-files@v1
       - run: |
