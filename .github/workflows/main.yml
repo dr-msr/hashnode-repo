@@ -23,7 +23,7 @@ jobs:
         run: |
          for changed_file in ${{ steps.files.outputs.added }}; do
          content=$(sed '/---/,/---/d' ${changed_file} )
-         echo "content=$content" >> $GITHUB_OUTPUT
+         echo "content<<EOF"$'\n'"$content"$'\n'EOF >> $GITHUB_OUTPUT
          done
       - name: Send mail
         uses: dawidd6/action-send-mail@v3
