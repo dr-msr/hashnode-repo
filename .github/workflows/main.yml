@@ -16,7 +16,7 @@ jobs:
       - id: generate-subject
         run: |
          for changed_file in ${{ steps.files.outputs.added }}; do
-         subject=$(grep "title" ${changed_file} | sed 's/title: //' | sed 's/"//' | sed 's/"//' | sed 's/^/DevBlog - /')
+         subject=$(grep "title" ${changed_file} | sed 's/title: //' | sed 's/"//' | sed 's/"//')
          echo "subject<<EOF"$'\n'"$subject"$'\n'EOF >> $GITHUB_OUTPUT
          done
       - id: generate-content
