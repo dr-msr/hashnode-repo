@@ -1,8 +1,6 @@
 ---
-title: "Authenticating The Hub"
+title: "Sekejap je, Kid"
 ---
-
-Sekejap je, Kid.
 
 I think it is very difficult for me to connect. Of showing weaknesses/vulnerabilities, because other people might not perceive the same way. It is difficult for me to step on the grass, try to find my footling and place where I belong. 
 
