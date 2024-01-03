@@ -31,7 +31,7 @@ Peeking under the hood with Wappalyzer revealed that the site is powered by Next
 
 ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1704257130892/301526a4-042c-43bc-a5b8-3669316cf12a.png align="center")
 
-I tried making an call to the `api/auth/login` route by passing an empty string of `noKp` and `katalaluan`. The server responded with failed status and error message `"Kata laluan tidak memenuhi syarat."` (The password does not meet the requirement) . Hmm.. funny. Another call to the route were made, with a proper random password, returning a message `"No Kad Pengenalan tidak sah"` (Invalid NRIC Number).
+I tried making a call to the `api/auth/login` route by passing an empty string of `noKp` and `katalaluan`. The server responded with failed status and error message `"Kata laluan tidak memenuhi syarat."` (The password does not meet the requirement) . Hmm.. funny. Another call to the route were made, with a proper random password, returning a message `"No Kad Pengenalan tidak sah"` (Invalid NRIC Number).
 
 I tried making few other calls to the API. Upon using a wrong password, it returned a `success 200` status but with data value `"Unauthorized".` Finally, I tried calling the API using my NRIC Number and the correct password. It returned a `success 200` status with response `"Authenticated"` msg, an UUID, my full name, my own NRIC, and a JWT token.
 
@@ -39,11 +39,11 @@ I tried making few other calls to the API. Upon using a wrong password, it retur
 
 The JS source code reveals that upon a successful call with `"Authenticated"` msg, will save the JWT token into the `session_storage` of the browser and redirects the user to `/page/data` page route. This page route is protected and uses the JWT token for subsequent API calls.
 
-### Taking a Jab at the Unprotected Route
+### Taking a Jab at the Unprotected Routes
 
-There are two unprotected page routes on the site, the `/auth/daftar` and `auth/terlupa-kata-laluan` . The JS source codes of both routes revealed several other API endpoint URLs, that is similar to the front page : unprotected, without Authorization header, and unencrypted JSON payload. Both routes implement an almost similar frontend API flow,
+There are two unprotected page routes on the site, the `/auth/daftar` and `/auth/terlupa-kata-laluan` . The JS source codes of both routes revealed several other API endpoint URLs, that is similar to the front page : unprotected, without Authorization header, and unencrypted JSON payload. Both routes implement an almost similar frontend API flow,
 
-1. Call `/api/daftar/maklumat-asas` route with the user's particular, will prompt server validation and if succeed, returning an UUID. In `api/auth/terlupa-kata-laluan`, the API requiring only NRIC number and phone number, returning UUID.
+1. Call `/api/daftar/maklumat-asas` route with the user's particular, will prompt server validation and if succeed, returning an UUID. In `/api/auth/terlupa-kata-laluan`, the API requiring only NRIC number and phone number, returning UUID.
     
 2. Call `/api/daftar/hantar-otp` route with UUID and NRIC Number, prompting an SMS OTP sent to the supplied phone number in (1).
     
@@ -52,7 +52,7 @@ There are two unprotected page routes on the site, the `/auth/daftar` and `auth/
 
 Once the last API is called and returned as success, indicating that the NRIC Number is registered and UUID is returned, the script loads the screen for setting a new password. This is where I found a critical error.
 
-<mark>The API route for setting a password ( </mark> `/api/auth/terlupa-katalaluan/reset-katalaluan` <mark> &amp; </mark> `/api/daftar/set-katalaluan` <mark> ) only requires one "</mark>`noKp`<mark>" string value, one "</mark>`Password`<mark>" string value, and one "</mark>`Type`<mark>" string value.</mark>
+The API route for setting a password ( `/api/auth/terlupa-katalaluan/reset-katalaluan` & `/api/daftar/set-katalaluan` ) only requires one "`noKp`" string value, one "`Password`" string value, and one "`Type`" string value.
 
 My first thought was that probably the developer assumed on the frontend, the user would not reach this API call unless they passed the OTP verification in the previous screen. When in fact, the API request method can be seen in the script regardless of the OTP verification.
 
@@ -72,11 +72,11 @@ Knowing that this is a very critical error, and that currently at that time tens
 
 %[https://twitter.com/drmsr_dev/status/1742142287272935557] 
 
-Within a couple of hours, I can see that they have made some changes to the script. Initially the critical API call is enhanced with requiring UUID instead NRIC Number, and then few hours later, the OTP Code value is also required to call the API.
+Within a couple of hours, I could see that they have made some changes to the script. Initially the critical API call was enhanced by requiring UUID instead of NRIC Number. A few hours later, the OTP Code value is also required to call the API.
 
 ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1704256944422/c27443af-6e95-400d-a280-9dbf29e4ff3c.jpeg align="center")
 
-Currently, the developers have mitigated the issue by making those changes. Users are no longer able to call the reset password API unless they have the UUID, the sent OTP code to the registered number, and the NRIC Number. While it is not perfect, I'm sure they will take a deep look into this issue.
+Currently, the developers have mitigated the issue by making those changes. Users are no longer able to call the reset password API unless they have the UUID, the sent OTP code to the registered number, and the NRIC Number. While it is not perfect, I'm sure they will continue taking a deep look into this issue.
 
 My post on X gained tractions and attentions of multiple parties. Public and netizens were expectedly outraged, as they perceived that the website and the whole initiative as not yet ready for public usage. Developer community and cybersecurity experts raised concerns whether the site has been properly tested, reviewed and validated prior pushing to production. Some others shared their opinion and suggestions in making the site more secure and up to the standard in security viewpoint.
 
